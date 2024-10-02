@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Página Inicial{% endblock %}
+
+{% block content %}
+    <div>
+        {% include "carteira/carteira.html" %}
+    </div>
+    <div>
+        {% include "carteira/graficos.html" %}
+    </div>
+    <div>
+        {% include "movimentacao/movimentacao.html" %}
+    </div>
+    <div>
+        {% include "transacoes/transacoes.html" %}
+    </div>
+{% endblock %}

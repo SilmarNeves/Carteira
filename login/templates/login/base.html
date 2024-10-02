@@ -1,0 +1,27 @@
+<li><a href="{% url 'login:login' %}">Entrar</a></li>
+<li><a href="{% url 'login:register' %}">Registrar</a></li>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Projeto Silmar</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{% url 'login:index' %}">Início</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'login:logout' %}">Sair</a></li>
+                {% else %}
+                    <li><a href="{% url 'login:login' %}">Entrar</a></li>
+                    <li><a href="{% url 'login:register' %}">Registrar</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+
+{% block css %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+{% endblock %}
+
+{% block content %}
+    <h1>Posição na Carteira</h1>
+
+    <form method="get">
+        <label for="tabela">Selecione a carteira:</label>
+        <select id="tabela" name="tabela" onchange="this.form.submit()">
+            {% for nome_carteira, nome_tabela in tabelas_nomes.items %}
+                <option value="{{ nome_carteira }}" {% if tabela_selecionada == nome_carteira %}selected{% endif %}>{{ nome_carteira }}</option>
+            {% endfor %}
+        </select>
+    </form>
+
+    {% if movimentacao %}
+        <h2>Movimentação por Mês</h2>
+        <table id="movimentacao-tabela" class="display" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Mês/Ano</th>
+                    <th>Total de Compras</th>
+                    <th>Total de Vendas</th>
+                    <th>Aportes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in movimentacao %}
+                    <tr>
+                        <td>{{ row.AnoMes }}</td>
+                        <td>{{ row.Total_de_Compras }}</td>
+                        <td>{{ row.Total_de_Vendas }}</td>
+                        <td>{{ row.Aportes }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="mt-4">
+            <h3>Resumo do Patrimônio</h3>
+            <p>Total do Patrimônio Atual de FII: {{ patrimonio_fii }}</p>
+            <p>Total do Patrimônio Atual de Ações: {{ patrimonio_acoes }}</p>
+            <p>Total Geral: {{ patrimonio_total }}</p>
+        </div>
+
+        <h2>Gráfico de Movimentação</h2>
+        <canvas id="movimentacao-chart" width="400" height="200"></canvas>
+    {% else %}
+        <p>Nenhum dado encontrado.</p>
+    {% endif %}
+{% endblock %}
+
+{% block js %}
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#movimentacao-tabela').DataTable({
+                "paging": true,
+                "ordering": true,
+                "info": true,
+                "searching": true,
+                "lengthChange": true
+            });
+
+            var ctx = document.getElementById('movimentacao-chart').getContext('2d');
+            var movimentacaoData = {
+                labels: [{% for row in movimentacao %} '{{ row.AnoMes }}', {% endfor %}],
+                datasets: [
+                    {
+                        label: 'Total de Compras',
+                        data: [{% for row in movimentacao %} {{ row.Total_de_Compras }}, {% endfor %}],
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1,
+                        fill: true
+                    },
+                    {
+                        label: 'Total de Vendas',
+                        data: [{% for row in movimentacao %} {{ row.Total_de_Vendas }}, {% endfor %}],
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1,
+                        fill: true
+                    },
+                    {
+                        label: 'Aportes',
+                        data: [{% for row in movimentacao %} {{ row.Aportes }}, {% endfor %}],
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1,
+                        fill: true
+                    }
+                ]
+            };
+
+            var movimentacaoChart = new Chart(ctx, {
+                type: 'line',
+                data: movimentacaoData,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Movimentação Financeira Mensal'
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        legend: {
+                            position: 'top'
+                        }
+                    },
+                    interaction: {
+                        mode: 'nearest',
+                        axis: 'x',
+                        intersect: false
+                    },
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Mês/Ano'
+                            }
+                        },
+                        y: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Quantidade'
+                            },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}

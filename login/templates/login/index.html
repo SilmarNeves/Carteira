@@ -1,0 +1,8 @@
+{% if user.is_authenticated %}
+<p>Bem-vindo, {{ user.username }}!</p>
+<a href="{% url 'login:logout' %}">Sair</a> <!-- Adicione o namespace 'login:' -->
+{% else %}
+<p>Você não está logado.</p>
+<a href="{% url 'login:login' %}">Entrar</a>
+<a href="{% url 'login:register' %}">Registrar</a>
+{% endif %}

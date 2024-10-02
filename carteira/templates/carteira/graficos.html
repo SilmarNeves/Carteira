@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% load custom_filters %}
+
+{% block title %}Gráficos e Totais Gerais{% endblock %}
+
+{% block extra_head %}
+<style>
+    .variacao-positiva {
+        color: green;
+    }
+    .variacao-negativa {
+        color: red;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Totais Gerais</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Tipo</th>
+                <th>Total</th>
+                <th>Variação Hoje</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tipo, total in totais.items %}
+                <tr>
+                    <td>{{ tipo }}</td>
+                    <td>{{ total|floatformat:2 }}</td>
+                    <td>
+                        {% if tipo in variacoes %}
+                            {% with variacao=variacoes|get_item:tipo %}
+                                <span class="{% if variacao.percentual >= 0 %}variacao-positiva{% else %}variacao-negativa{% endif %}">
+                                    {{ variacao.percentual|floatformat:2 }}%
+                                    ({% if variacao.absoluta >= 0 %}+{% endif %}{{ variacao.absoluta|floatformat:2 }})
+                                </span>
+                            {% endwith %}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="mt-4">
+        <h2>Gráficos de Investimentos</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <h3>Tipos de Ativos</h3>
+                <canvas id="graficoTipos"></canvas>
+            </div>
+            <div class="col-md-4">
+                <h3>Ações</h3>
+                <canvas id="graficoAcoes"></canvas>
+            </div>
+            <div class="col-md-4">
+                <h3>FIIs</h3>
+                <canvas id="graficoFiis"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var ctxTipos = document.getElementById('graficoTipos').getContext('2d');
+        var graficoTipos = new Chart(ctxTipos, {
+            type: 'pie',
+            data: {
+                labels: {{ grafico_tipos_labels|safe }},
+                datasets: [{
+                    data: {{ grafico_tipos_data|safe }},
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+
+        var ctxAcoes = document.getElementById('graficoAcoes').getContext('2d');
+        var graficoAcoes = new Chart(ctxAcoes, {
+            type: 'pie',
+            data: {
+                labels: {{ grafico_acoes_labels|safe }},
+                datasets: [{
+                    data: {{ grafico_acoes_data|safe }},
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+
+        var ctxFiis = document.getElementById('graficoFiis').getContext('2d');
+        var graficoFiis = new Chart(ctxFiis, {
+            type: 'pie',
+            data: {
+                labels: {{ grafico_fiis_labels|safe }},
+                datasets: [{
+                    data: {{ grafico_fiis_data|safe }},
+                    backgroundColor: [
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    });
+</script>
+{% endblock %}

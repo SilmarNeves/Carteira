@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Transações{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Transações</h1>
+    
+    <form method="get">
+        <label for="tabela">Selecione a tabela:</label>
+        <select id="tabela" name="tabela" onchange="this.form.submit()">
+            {% for nome_tabela, nome_exibicao in tabelas_nomes.items %}
+                <option value="{{ nome_tabela }}" {% if tabela_selecionada == nome_tabela %}selected{% endif %}>{{ nome_exibicao }}</option>
+            {% endfor %}
+        </select>
+    </form>
+    
+    {% if dados %}
+        <table id="tabela-transacoes" class="display data-table" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Operação</th>
+                    <th>Ativo</th>
+                    <th>Quantidade</th>
+                    <th>Preço</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transacao in dados %}
+                    <tr>
+                        <td>{{ transacao.Data|date:"d-m-y" }}</td>
+                        <td>{{ transacao.Operacao }}</td>
+                        <td>{{ transacao.Ativo }}</td>
+                        <td>{{ transacao.Quantidade }}</td>
+                        <td>{{ transacao.Preço }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Nenhum dado encontrado.</p>
+    {% endif %}
+</div>
+
+<script>
+    // Plugin para ordenar datas no formato dd-mm-yy
+    jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+        "date-eu-pre": function (a) {
+            if (a.trim() !== '') {
+                var eu_date = a.split('-');
+                var year = eu_date[2].length === 2 ? '20' + eu_date[2] : eu_date[2];
+                var x = (year + eu_date[1] + eu_date[0]) * 1;
+            } else {
+                var x = 0;
+            }
+            return x;
+        },
+
+        "date-eu-asc": function (a, b) {
+            return a - b;
+        },
+
+        "date-eu-desc": function (a, b) {
+            return b - a;
+        }
+    });
+
+    $(document).ready(function() {
+        $('#tabela-transacoes').DataTable({
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "searching": true,
+            "lengthChange": true,
+            "order": [[0, "desc"]],
+            "columnDefs": [
+                {
+                    "targets": 0,
+                    "type": "date-eu"
+                }
+            ]
+        });
+    });
+</script>
+{% endblock %}
+
+
+
+
+

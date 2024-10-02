@@ -1,0 +1,9 @@
+button[type="submit"] {
+  background-color: #add8e6; /* Azul claro */
+  color: #333; /* Cor do texto */
+  padding: 10px 20px; /* Espaçamento interno */
+  border: none; /* Remover borda */
+  border-radius: 4px; /* Bordas arredondadas */
+  cursor: pointer; /* Cursor de ponteiro ao passar o mouse */
+}
+

@@ -1,0 +1,119 @@
+/* General styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Styles for atualizacao.html */
+.atualizacao .container {
+  text-align: center;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.atualizacao h1 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.atualizacao .btn {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 10px;
+  font-size: 16px;
+  color: white;
+  background-color: #007BFF;
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.atualizacao .btn:hover {
+  background-color: #0056b3;
+}
+
+.atualizacao form {
+  display: inline;
+}
+
+/* Styles for atualizar_transacoes.html */
+.atualizar_transacoes .container {
+  text-align: center;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.atualizar_transacoes h1 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.atualizar_transacoes .btn {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 10px;
+  font-size: 16px;
+  color: white;
+  background-color: #007BFF;
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.atualizar_transacoes .btn:hover {
+  background-color: #0056b3;
+}
+
+.atualizar_transacoes form {
+  display: inline;
+}
+
+/* Styles for atualizar_cotacao.html */
+.atualizar_cotacao .container {
+  text-align: center;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.atualizar_cotacao h1 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.atualizar_cotacao .btn {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 10px;
+  font-size: 16px;
+  color: white;
+  background-color: #007BFF;
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.atualizar_cotacao .btn:hover {
+  background-color: #0056b3;
+}
+
+.atualizar_cotacao form {
+  display: inline;
+}

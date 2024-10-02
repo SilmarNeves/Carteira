@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% load custom_filters %}
+
+{% block title %}Carteira de Investimentos{% endblock %}
+
+{% block extra_head %}
+<style>
+    .variacao-positiva {
+        color: green;
+    }
+    .variacao-negativa {
+        color: red;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-5">Carteira de Investimentos</h1>
+    <div class="form-group">
+        <label for="tabela">Selecione a Carteira:</label>
+        <select id="tabela" class="form-control" onchange="location = this.value;">
+            {% for nome_exibicao, nome_tabela in tabelas_nomes.items %}
+                <option value="?tabela={{ nome_exibicao }}" {% if tabela_selecionada == nome_exibicao %}selected{% endif %}>{{ nome_exibicao }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    
+    <div class="accordion mt-4" id="carteiraAccordion">
+        {% for tipo, ativos in dados_por_tipo.items %}
+            <div class="card">
+                <div class="card-header" id="heading{{ tipo }}">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse{{ tipo }}" aria-expanded="true" aria-controls="collapse{{ tipo }}">
+                            {{ tipo }}
+                        </button>
+                    </h2>
+                </div>
+
+                <div id="collapse{{ tipo }}" class="collapse" aria-labelledby="heading{{ tipo }}" data-parent="#carteiraAccordion">
+                    <div class="card-body">
+                        <table class="table table-striped data-table" id="tabela{{ tipo }}">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Quantidade</th>
+                                    <th>Preço Médio</th>
+                                    <th>Preço Atual</th>
+                                    <th>Ganho/Perda Hoje %</th>
+                                    <th>Ganho/Perda Hoje R$</th>
+                                    <th>Variação Total %</th>
+                                    <th>Patrimônio Atual</th>
+                                    <th>% Ativo</th>
+                                    <th>% Carteira</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for ativo in ativos %}
+                                    <tr>
+                                        <td>{{ ativo.0 }}</td>
+                                        <td>{{ ativo.2 }}</td>
+                                        <td>{{ ativo.3 }}</td>
+                                        <td>{{ ativo.4 }}</td>
+                                        <td class="{% if ativo.6 >= 0 %}variacao-positiva{% else %}variacao-negativa{% endif %}">
+                                            {{ ativo.6 }}
+                                        </td>
+                                        <td class="{% if ativo.7 >= 0 %}variacao-positiva{% else %}variacao-negativa{% endif %}">
+                                            {{ ativo.7 }}
+                                        </td>
+                                        <td>{{ ativo.8 }}</td>
+                                        <td>{{ ativo.9 }}</td>
+                                        <td>{{ ativo.10 }}</td>
+                                        <td class="{% if ativo.11 >= 0 %}variacao-positiva{% else %}variacao-negativa{% endif %}">
+                                            {{ ativo.11 }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Inicializar DataTables quando a tabela estiver visível (após a expansão do accordion)
+        $('.collapse').on('shown.bs.collapse', function () {
+            $(this).find('.data-table').DataTable();
+        });
+    });
+</script>
+{% endblock %}

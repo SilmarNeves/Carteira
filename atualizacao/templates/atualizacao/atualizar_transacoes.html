@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atualizar Transações</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body class="atualizar_transacoes">
+    <div class="container">
+        <h1>Atualizar Transações</h1>
+        <form method="POST" action="{% url 'atualizar_transacoes' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn">Atualizar Transações</button>
+        </form>
+        <a href="{% url 'atualizacao' %}" class="btn">Voltar</a>
+    </div>
+</body>
+</html>

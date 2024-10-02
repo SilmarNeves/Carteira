@@ -1,0 +1,24 @@
+{% extends 'login/base.html' %}
+
+{% load static %}
+
+{% block content %}
+  <h1>Faça seu Login ao Sistema</h1>
+  <h2>Login</h2>
+
+  {% if error %}
+    <p>{{ error }}</p>
+  {% endif %}
+
+  <form method="post">
+    {% csrf_token %}
+
+    <label for="username">Usuário:</label>
+    <input type="text" id="username" name="username" required>
+
+    <label for="password">Senha:</label>
+    <input type="password" id="password" name="password" required>
+
+    <button type="submit">Entrar</button>
+  </form>
+{% endblock %}
